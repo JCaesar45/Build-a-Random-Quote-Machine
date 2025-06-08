@@ -1,0 +1,130 @@
+** start of index.html **
+<div id="root"></div>
+
+** end of index.html **
+
+** start of styles.css **
+
+body {
+  background: #f4f4f4;
+  font-family: Arial, sans-serif;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+}
+
+.box {
+  background: white;
+  padding: 2rem;
+  border-radius: 10px;
+  max-width: 500px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+#text {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+#author {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+  color: #666;
+}
+
+.buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+#tweet-quote,
+#new-quote {
+  background: #1da1f2;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  text-decoration: none;
+  border-radius: 5px;
+  transition: background 0.3s;
+  cursor: pointer;
+}
+
+#tweet-quote:hover,
+#new-quote:hover {
+  background: #0d95e8;
+}
+
+** end of styles.css **
+
+** start of script.jxs **
+
+const quotes = [
+  {
+    text: "Life is what happens when you're busy making other plans.",
+    author: "John Lennon"
+  },
+  {
+    text: "The only way to do great work is to love what you do.",
+    author: "Steve Jobs"
+  },
+  {
+    text: "The unexamined life is not worth living.",
+    author: "Socrates"
+  },
+  {
+    text:
+      "Success is not final, failure is not fatal: It is the courage to continue that counts.",
+    author: "Winston Churchill"
+  },
+  {
+    text: "Be yourself; everyone else is already taken.",
+    author: "Oscar Wilde"
+  }
+];
+
+function getRandomQuote() {
+  const index = Math.floor(Math.random() * quotes.length);
+  return quotes[index];
+}
+
+function App() {
+  const [quote, setQuote] = React.useState(getRandomQuote());
+
+  const handleNewQuote = () => {
+    let newQuote;
+    do {
+      newQuote = getRandomQuote();
+    } while (newQuote.text === quote.text); // prevent repeat
+    setQuote(newQuote);
+  };
+
+  const tweetHref = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
+    `"${quote.text}" — ${quote.author}`
+  )}`;
+
+  return (
+    <div id="quote-box" className="box">
+      <p id="text">"{quote.text}"</p>
+      <p id="author">— {quote.author}</p>
+      <div className="buttons">
+        <a
+          id="tweet-quote"
+          href={tweetHref}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Tweet
+        </a>
+        <button id="new-quote" onClick={handleNewQuote}>
+          New Quote
+        </button>
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.render(<App />, document.getElementById("root"));
